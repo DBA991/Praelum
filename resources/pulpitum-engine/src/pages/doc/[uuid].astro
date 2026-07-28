@@ -1,0 +1,51 @@
+---
+
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import DocumentViewer from '../../components/DocumentViewer.vue'
+import { loadHtmlDocuments } from '../../lib/metadata.js'
+
+export async function getStaticPaths() {
+  const docs = await loadHtmlDocuments()
+  return docs.map((doc) => ({
+    params: { uuid: doc.uuid },
+    props: {
+      uuid: doc.uuid,
+      title: doc.title,
+      language: doc.language,
+      htmlContent: doc.htmlContent,
+      htmlUrl: doc.htmlUrl,
+      pdfUrl: doc.pdfUrl,
+      xmlUrl: doc.xmlUrl,
+      pdfAvailable: doc.pdfAvailable,
+      xmlAvailable: doc.xmlAvailable
+    }
+  }))
+}
+
+interface Props {
+  uuid: string
+  title: string
+  language: string
+  htmlContent: string
+  htmlUrl: string
+  pdfUrl: string
+  xmlUrl: string
+  pdfAvailable: boolean
+  xmlAvailable: boolean
+}
+
+const props = Astro.props
+const { uuid, title, language, htmlContent, htmlUrl, pdfUrl, xmlUrl } = props
+---
+<BaseLayout title={`${title} — Pulpitum`} description={`Documento: ${title}`}>
+  <DocumentViewer
+    client:load
+    uuid={uuid}
+    title={title}
+    language={language}
+    html-content={htmlContent}
+    html-url={htmlUrl}
+    pdf-url={pdfUrl}
+    xml-url={xmlUrl}
+  />
+</BaseLayout>

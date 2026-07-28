@@ -1,0 +1,26 @@
+---
+
+import PopupLayout from '../../../layouts/PopupLayout.astro'
+import PdfPopupViewer from '../../../components/PdfPopupViewer.vue'
+import { loadHtmlDocuments } from '../../../lib/metadata.js'
+
+export async function getStaticPaths() {
+  const docs = await loadHtmlDocuments()
+  return docs.map((doc) => ({
+    params: { uuid: doc.uuid },
+    props: {
+      uuid: doc.uuid,
+      pdfUrl: doc.pdfUrl
+    }
+  }))
+}
+
+interface Props {
+  uuid: string
+  pdfUrl: string
+}
+const { uuid, pdfUrl } = Astro.props
+---
+<PopupLayout title={`Documento — ${uuid}`}>
+  <PdfPopupViewer client:load uuid={uuid} pdf-url={pdfUrl} />
+</PopupLayout>

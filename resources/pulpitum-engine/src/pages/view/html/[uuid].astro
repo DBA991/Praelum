@@ -1,0 +1,26 @@
+---
+
+import PopupLayout from '../../../layouts/PopupLayout.astro'
+import HtmlPopupViewer from '../../../components/HtmlPopupViewer.vue'
+import { loadHtmlDocuments } from '../../../lib/metadata.js'
+
+export async function getStaticPaths() {
+  const docs = await loadHtmlDocuments()
+  return docs.map((doc) => ({
+    params: { uuid: doc.uuid },
+    props: {
+      uuid: doc.uuid,
+      htmlContent: doc.htmlContent
+    }
+  }))
+}
+
+interface Props {
+  uuid: string
+  htmlContent: string
+}
+const { uuid, htmlContent } = Astro.props
+---
+<PopupLayout title={`Testo — ${uuid}`}>
+  <HtmlPopupViewer client:load uuid={uuid} html-content={htmlContent} />
+</PopupLayout>

@@ -1,0 +1,139 @@
+---
+
+import BaseLayout from '../layouts/BaseLayout.astro'
+import { loadHtmlDocuments } from '../lib/metadata.js'
+
+const docs = await loadHtmlDocuments()
+---
+<BaseLayout title="Pulpitum" description="Indice dei documenti">
+  <main class="library-index">
+    <header class="library-header">
+      <h1>Pulpitum</h1>
+      <p class="subtitle">Biblioteca digitale distribuita - <a class="subtitle" href="https://delta2studio.pages.dev">Delta2Studio</a></p>
+    </header>
+
+    {
+      docs.length === 0 ? (
+        <p class="empty">
+          Nessun documento trovato in <code>/json</code>. Esegui{' '}
+          <code>npm run generate:dummy</code> per creare un documento di esempio, oppure esporta i
+          documenti da Scriptorium.
+        </p>
+      ) : (
+        <ul class="doc-list">
+          {docs.map((doc) => (
+            <li class="doc-item">
+              <a href={`/doc/${doc.uuid}`} class="doc-link">
+                <span class="doc-title">{doc.title}</span>
+                <span class="doc-meta">
+                  {doc.language && <span class="lang">{doc.language.toUpperCase()}</span>}
+                  {!doc.pdfAvailable && <span class="warn">PDF mancante</span>}
+                  {!doc.xmlAvailable && <span class="warn">XML mancante</span>}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+
+    <footer class="library-footer">
+      <p>
+        <small>
+          {docs.length} documento{docs.length === 1 ? '' : 'i'} disponibile
+          {docs.length === 1 ? '' : 'i'}.
+        </small>
+      </p>
+    </footer>
+  </main>
+</BaseLayout>
+
+<style>
+  .library-index {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+  }
+  .library-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid #e0e0e0;
+  }
+  .library-header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    color: #2c3e50;
+    letter-spacing: 0.02em;
+  }
+  .subtitle {
+    margin: 0.5rem 0 0;
+    color: #7f8c8d;
+    font-style: italic;
+  }
+  .empty {
+    text-align: center;
+    padding: 2rem;
+    color: #7f8c8d;
+    background: #fff3cd;
+    border-radius: 6px;
+    border: 1px solid #ffeaa7;
+  }
+  .empty code {
+    background: rgba(0, 0, 0, 0.07);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+  .doc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .doc-item {
+    margin-bottom: 0.5rem;
+  }
+  .doc-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    text-decoration: none;
+    color: inherit;
+    transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+  }
+  .doc-link:hover {
+    border-color: var(--pulpitum-accent);
+    box-shadow: 0 2px 8px rgba(41, 128, 185, 0.15);
+  }
+  .doc-title {
+    font-weight: 500;
+    font-size: 1.1rem;
+  }
+  .doc-meta {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  .lang {
+    background: #ecf0f1;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #34495e;
+  }
+  .warn {
+    color: #c0392b;
+    font-size: 0.75rem;
+  }
+  .library-footer {
+    margin-top: 3rem;
+    text-align: center;
+    color: #95a5a6;
+  }
+</style>

@@ -1,0 +1,85 @@
+---
+
+interface Props {
+  title?: string
+  description?: string
+}
+const { title = 'Pulpitum', description = 'Distributed digital library' } = Astro.props
+---
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    
+    --paper-000: #fdfcf8;
+    --paper-100: #f5f2eb;
+    --paper-200: #e8e3d3;
+    
+    
+    --ink-300: #a39e93;
+    --ink-500: #6b665c;
+    --ink-700: #4a453d;
+    --ink-900: #201d18;
+    
+    
+    --rubric-700: #9b2c2c; 
+    --gold-600: #b8860b;   
+
+    
+    --font-body: 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, serif;
+    --font-display: 'Cinzel', 'Trajan Pro', 'Georgia', serif;
+    --font-mono: 'Courier New', Courier, monospace;
+    
+    
+    --pulpitum-bg: var(--paper-100);
+    --pulpitum-fg: var(--ink-900);
+    --pulpitum-accent: var(--rubric-700);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: var(--font-body);
+    color: var(--ink-900);
+    background: var(--paper-100);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--paper-200);
+    border-left: 1px solid var(--ink-300);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--ink-500);
+    border: 2px solid var(--paper-200);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--ink-700);
+  }
+</style>

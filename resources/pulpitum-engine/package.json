@@ -1,0 +1,27 @@
+{
+  "name": "pulpitum",
+  "version": "0.1.0",
+  "description": "Pulpitum - distributed digital library - Petrarca Project",
+  "type": "module",
+  "author": "Delta2Studio",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "npm run sync:public && astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "sync:public": "node scripts/build-helper.js sync-public",
+    "generate:dummy": "node scripts/build-helper.js generate",
+    "validate": "node scripts/build-helper.js validate"
+  },
+  "dependencies": {
+    "@astrojs/vue": "^5.0.13",
+    "astro": "^5.13.0",
+    "pdfjs-dist": "5.4.624",
+    "vue": "^3.5.18"
+  },
+  "devDependencies": {
+    "pdf-lib": "^1.17.1"
+  }
+}
