@@ -12,7 +12,7 @@ asarUnpack:
   - resources/**
   - resources/pulpitum-engine/**
 win:
-  executableName: pulpitum-desktop
+  executableName: praelum
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
