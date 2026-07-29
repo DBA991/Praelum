@@ -4,6 +4,7 @@
 
 Praelum is a small Electron desktop application that turns a folder of serialized documents — the output of [**Scriptorium**](https://github.com/DBA991/Scriptorium)'s *Export* stage — into a complete, static, browsable [**Pulpitum**](https://github.com/DBA991/Pulpitum) website. It validates the source material, runs the actual Astro-based site build, and lets you preview the result locally before it goes anywhere else. In the digitization pipeline, Praelum is the "print run": it takes finished, individually exported editions and presses them into a single distributable digital library.
 A Pulpitum demo is [here](https://pulpitumdemo.pages.dev).
+
 ---
 
 ## Table of Contents
