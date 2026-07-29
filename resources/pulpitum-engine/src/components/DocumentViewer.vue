@@ -1,5 +1,4 @@
 <script setup>
-
 import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import HtmlViewer from './html-viewer/HtmlViewer.vue'
 import PdfViewer from './PdfViewer.vue'
@@ -16,43 +15,27 @@ const props = defineProps({
   language: { type: String, default: '' }
 })
 
-
 const HTML_SOURCE = 'html'
 const PDF_SOURCE = 'pdf'
-
-
 const TOOLBAR_SOURCE = 'toolbar'
-
-
-
 
 const MOBILE_BREAKPOINT = 992
 const isMobile = ref(false)
 let mobileMediaQuery = null
 
-
 const activeView = ref('html')
-
 
 const htmlViewerRef = ref(null)
 const pdfViewerRef = ref(null)
 
-
 const sync = createSync(props.uuid)
-
 
 const currentPage = ref(1)
 const totalPages = ref(0)
 
-
-
 let lastSource = null
 
 let unsubPageChange = null
-
-
-
-
 
 const MIN_PANEL_PERCENT = 25
 const MAX_PANEL_PERCENT = 75
@@ -61,7 +44,6 @@ const splitPanelsEl = ref(null)
 const isDragging = ref(false)
 
 const startDrag = (event) => {
-  
   if (event.type === 'mousedown' && event.button !== 0) return
   isDragging.value = true
   event.preventDefault()
@@ -93,28 +75,20 @@ const onMobileChange = (event) => {
 }
 
 onMounted(() => {
-  
-  
   unsubPageChange = sync.onPageChange((page, source) => {
     currentPage.value = page
-    
+
     if (source === HTML_SOURCE) {
-      
       pdfViewerRef.value?.goToPage(page)
     } else if (source === PDF_SOURCE) {
-      
       htmlViewerRef.value?.goToPage(page)
     } else {
-      
-      
       if (lastSource !== HTML_SOURCE) htmlViewerRef.value?.goToPage(page)
       if (lastSource !== PDF_SOURCE) pdfViewerRef.value?.goToPage(page)
     }
     lastSource = source
   })
 
-  
-  
   mobileMediaQuery = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`)
   isMobile.value = mobileMediaQuery.matches
   mobileMediaQuery.addEventListener('change', onMobileChange)
@@ -129,36 +103,25 @@ onBeforeUnmount(() => {
   }
 })
 
-
-
-
 const onHtmlPageChange = (pageN) => {
-  
-  
   if (isMobile.value && activeView.value !== 'html') return
 
   const n = Number(pageN)
   if (Number.isFinite(n)) {
     sync.gotoPage(n, HTML_SOURCE)
   } else {
-    
   }
 }
 
-
 const onPdfPageChange = (page) => {
-  
-  
   if (isMobile.value && activeView.value !== 'pdf') return
 
   sync.gotoPage(page, PDF_SOURCE)
 }
 
-
 const onPdfLoaded = ({ pages }) => {
   totalPages.value = pages
 }
-
 
 const onPrevPage = () => {
   const target = currentPage.value - 1
@@ -166,18 +129,15 @@ const onPrevPage = () => {
   sync.gotoPage(target, TOOLBAR_SOURCE)
 }
 
-
 const onNextPage = () => {
   const target = currentPage.value + 1
   if (totalPages.value > 0 && target > totalPages.value) return
   sync.gotoPage(target, TOOLBAR_SOURCE)
 }
 
-
 const onToggleView = () => {
   activeView.value = activeView.value === 'html' ? 'pdf' : 'html'
 
-  
   nextTick(() => {
     if (activeView.value === 'pdf') {
       pdfViewerRef.value?.goToPage(currentPage.value)
@@ -301,7 +261,6 @@ const onToggleView = () => {
   outline: none;
 }
 
-
 .split-panels.dragging {
   cursor: col-resize;
   user-select: none;
@@ -332,7 +291,6 @@ const onToggleView = () => {
   pointer-events: none;
 }
 
-
 .split-panels.mobile-mode .panel {
   width: 100% !important;
   flex: 1 1 auto;
@@ -342,12 +300,11 @@ const onToggleView = () => {
   display: none !important;
 }
 
-
 @media (max-width: 992px) {
   .split-panels {
     flex-direction: column;
   }
-  
+
   .panel-divider {
     width: 100%;
     height: 4px;
