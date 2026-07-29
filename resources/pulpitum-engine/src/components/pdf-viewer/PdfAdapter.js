@@ -44,6 +44,7 @@ class PdfjsAdapter {
     const loadingTask = this.pdfjs.getDocument(url);
     this.pdfDoc = await loadingTask.promise;
     this._currentPage = 1;
+    this._zoom = await this._computeFitZoom();
     await this._renderPage(this._currentPage);
     this._notifyPageChange();
   }
@@ -52,6 +53,7 @@ class PdfjsAdapter {
     const target = Math.max(1, Math.min(n, this.numPages));
     if (target === this._currentPage) return;
     this._currentPage = target;
+    this._zoom = await this._computeFitZoom();
     await this._renderPage(this._currentPage);
     this._notifyPageChange();
   }
@@ -95,13 +97,7 @@ class PdfjsAdapter {
   async _renderPage(pageNum) {
     if (!this.pdfDoc || !this._canvas) return;
     const page = await this.pdfDoc.getPage(pageNum);
-    const baseViewport = page.getViewport({
-      scale: 1
-    });
-    let scale = this._zoom;
-    if (this._zoom <= 0) {
-      scale = this._computeFitScale(baseViewport.width);
-    }
+    const scale = this._zoom;
     const viewport = page.getViewport({
       scale
     });
@@ -133,9 +129,14 @@ class PdfjsAdapter {
       this._renderTask = null;
     }
   }
-  _computeFitScale(pageWidth) {
-    const containerWidth = this.container.clientWidth || 600;
-    return Math.max(0.25, (containerWidth - 24) / pageWidth);
+  _computeFitScale(pageWidth, pageHeight) {
+    const padding = 24;
+    const viewportEl = this.container.parentElement || this.container;
+    const availableWidth = viewportEl.clientWidth || this.container.clientWidth || 600;
+    const availableHeight = viewportEl.clientHeight || this.container.clientHeight || 800;
+    const scaleByWidth = (availableWidth - padding) / pageWidth;
+    const scaleByHeight = (availableHeight - padding) / pageHeight;
+    return Math.max(0.25, Math.min(scaleByWidth, scaleByHeight));
   }
   async _computeFitZoom() {
     if (!this.pdfDoc) return 1;
@@ -143,7 +144,7 @@ class PdfjsAdapter {
     const vp = page.getViewport({
       scale: 1
     });
-    return this._computeFitScale(vp.width);
+    return this._computeFitScale(vp.width, vp.height);
   }
   _notifyPageChange() {
     const total = this.numPages;
