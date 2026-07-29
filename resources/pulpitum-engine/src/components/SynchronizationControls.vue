@@ -18,8 +18,8 @@ const props = defineProps({
 const emit = defineEmits(['prev-page', 'next-page', 'toggle-view'])
 
 
-const popoutHtml = computed(() => `/viewer/html/${props.uuid}`)
-const popoutPdf = computed(() => `/viewer/pdf/${props.uuid}`)
+const popoutHtml = computed(() => `/view/html/${props.uuid}`)
+const popoutPdf = computed(() => `/view/pdf/${props.uuid}`)
 </script>
 
 <template>
